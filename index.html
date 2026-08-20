@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SHOPACC89.COM - HỆ THỐNG GAME & MINIGAME TỰ ĐỘNG</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="top-notice">
+    <span><i class="fa-solid fa-bullhorn" style="color:#f59e0b"></i> Nạp thẻ tự động 24/7 - Xử lý 3s</span>
+    <a href="tel:0865523664"><i class="fa-solid fa-phone"></i> 0865523664</a>
+</div>
+
+<div class="main-header">
+    <div class="logo"><i class="fa-solid fa-shield-halved"></i> SHOPACC89.COM</div>
+    <div class="header-actions">
+        <div class="btn-balance" onclick="App.openTopupModal()">
+            <i class="fa-solid fa-wallet"></i> <span id="user-balance">0</span>đ
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="hero-banner">
+        <div class="badge-live">Hệ Thống Tự Động</div>
+        <h2>THỬ VẬN MAY ACC VIP</h2>
+        <p>Cơ hội nhận Acc Full Tướng, Full Trang Phục chỉ từ 10K!</p>
+        <button class="btn-topup-action" style="background:#fff; color:var(--primary-red); width:auto; padding:8px 16px; font-size:12px;" onclick="App.openTopupModal()">
+            <i class="fa-solid fa-bolt"></i> NẠP THẺ NGAY
+        </button>
+    </div>
+
+    <div id="admin-panel">
+        <h3 style="color:#ef4444; font-size:14px; margin-bottom:10px;"><i class="fa-solid fa-user-shield"></i> BẢNG QUẢN TRỊ ADMIN</h3>
+        <div class="form-group">
+            <label>Danh mục Game</label>
+            <select id="adm-cat" class="form-control">
+                <option value="MINIGAME">Thử Vận May / Vòng Quay</option>
+                <option value="LIENQUAN">Liên Quân Mobile</option>
+                <option value="FREEFIRE">Free Fire</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Tên Sản Phẩm / Minigame</label>
+            <input type="text" id="adm-title" class="form-control" placeholder="Ví dụ: Vòng Quay Bãi Biển VIP">
+        </div>
+        <div class="form-group">
+            <label>Giá Bán (VNĐ)</label>
+            <input type="number" id="adm-price" class="form-control" placeholder="16150">
+        </div>
+        <div class="form-group">
+            <label>Tài Khoản | Mật Khẩu (Nếu là Acc)</label>
+            <input type="text" id="adm-creds" class="form-control" placeholder="taikhoan | matkhau">
+        </div>
+        <button onclick="App.uploadItem()" style="width:100%; background:#ef4444; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; cursor:pointer;">ĐĂNG TẢI LÊN SHOP</button>
+        
+        <h4 style="margin-top:15px; font-size:12px; font-weight:800;">Lịch Sử Thẻ Nạp Đã Thu Thập:</h4>
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr><th>Mạng</th><th>Mệnh giá</th><th>PIN</th><th>Serial</th></tr>
+                </thead>
+                <tbody id="admin-cards"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="leaderboard-card">
+        <div class="lb-title">
+            <i class="fa-solid fa-crown"></i> TOP ĐẠI GIA THÁNG 8
+        </div>
+        <div class="podium-container">
+            <div class="podium-item podium-2">
+                <div class="avatar-wrapper">T<span class="rank-tag">TOP 2</span></div>
+                <div class="user-hide">tê****</div>
+                <div class="amount-tag">5.300.000đ</div>
+            </div>
+            <div class="podium-item podium-1">
+                <div class="avatar-wrapper"><i class="fa-solid fa-crown crown-icon"></i>V<span class="rank-tag">TOP 1</span></div>
+                <div class="user-hide">vi*******</div>
+                <div class="amount-tag">6.000.000đ</div>
+            </div>
+            <div class="podium-item podium-3">
+                <div class="avatar-wrapper">B<span class="rank-tag">TOP 3</span></div>
+                <div class="user-hide">ba****</div>
+                <div class="amount-tag">1.566.450đ</div>
+            </div>
+        </div>
+        <div class="sub-leaderboard">
+            <div class="sub-rank-card">
+                <div style="display:flex; align-items:center; gap:6px;"><span class="sub-rank-badge">4</span><span>vu**...</span></div>
+                <span style="color:var(--primary-red); font-weight:800;">1.100.000đ</span>
+            </div>
+            <div class="sub-rank-card">
+                <div style="display:flex; align-items:center; gap:6px;"><span class="sub-rank-badge">5</span><span>hu****</span></div>
+                <span style="color:var(--primary-red); font-weight:800;">800.000đ</span>
+            </div>
+        </div>
+        <button class="btn-topup-action" onclick="App.openTopupModal()">
+            <i class="fa-solid fa-credit-card"></i> NẠP TIỀN BẢNG XẾP HẠNG
+        </button>
+    </div>
+
+    <div class="category-scroll">
+        <button class="tab-btn active" onclick="App.filterCategory('ALL', this)">Tất Cả</button>
+        <button class="tab-btn" onclick="App.filterCategory('MINIGAME', this)">Vòng Quay / Túi Mù</button>
+        <button class="tab-btn" onclick="App.filterCategory('LIENQUAN', this)">Liên Quân Mobile</button>
+        <button class="tab-btn" onclick="App.filterCategory('FREEFIRE', this)">Free Fire</button>
+    </div>
+
+    <div class="section-header">
+        <span><i class="fa-solid fa-fire" style="color:var(--primary-red)"></i> DỊCH VỤ NỔI BẬT</span>
+    </div>
+
+    <div class="product-grid" id="product-grid"></div>
+</div>
+
+<div class="toast-live" id="toast-live">
+    <div class="toast-avatar"><i class="fa-solid fa-gift"></i></div>
+    <div class="toast-content">
+        <div><span class="toast-user" id="toast-user">y********5</span> <span class="toast-action">đã xé túi mù</span></div>
+        <div style="font-weight:800; color:var(--primary-red);" id="toast-item">TÚI MÙ LIÊN QUÂN MIỀN TÂY</div>
+        <div class="toast-time" id="toast-time">10 giây trước</div>
+    </div>
+</div>
+
+<div class="bottom-bar">
+    <div class="nav-link active" onclick="App.navTo('home', this)"><i class="fa-solid fa-house"></i><span>Trang Chủ</span></div>
+    <div class="nav-link" onclick="App.openTopupModal()"><i class="fa-solid fa-credit-card"></i><span>Nạp Tiền</span></div>
+    <div class="nav-link" onclick="App.navTo('history', this)"><i class="fa-solid fa-clock-rotate-left"></i><span>Lịch Sử</span></div>
+    <div class="nav-link" onclick="App.toggleAdmin()"><i class="fa-solid fa-user-lock"></i><span>Admin</span></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
